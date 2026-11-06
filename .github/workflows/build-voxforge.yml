@@ -1,0 +1,30 @@
+name: Build VoxForge Windows
+on:
+  push:
+    branches: [voxforge-build]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Publish Windows x64
+        shell: pwsh
+        run: dotnet publish VoxForge/VoxForge.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false
+      - name: Verify executable
+        shell: pwsh
+        run: |
+          $exe = "VoxForge/bin/Release/net8.0-windows/win-x64/publish/VoxForge.exe"
+          if (!(Test-Path $exe)) { throw "VoxForge.exe missing" }
+          Get-Item $exe | Format-List Name,Length,FullName
+          Get-FileHash $exe -Algorithm SHA256
+      - uses: actions/upload-artifact@v4
+        with:
+          name: VoxForge-Windows-x64
+          path: VoxForge/bin/Release/net8.0-windows/win-x64/publish/VoxForge.exe
+          if-no-files-found: error
