@@ -104,7 +104,7 @@ static class IconPainter
             case AppIcon.Brain:
                 g.DrawArc(p, x + 2, y + 2, 9, 16, 85, 190); g.DrawArc(p, x + 9, y + 2, 9, 16, 265, 190); g.DrawLine(p, x + 10, y + 3, x + 10, y + 17); break;
             case AppIcon.Play:
-                using (var b = new SolidBrush(c)) g.FillPolygon(b, [new(x + 5, y + 3), new(x + 17, y + 10), new(x + 5, y + 17)]); break;
+                using (var b = new SolidBrush(c)) g.FillPolygon(b, new Point[] { new(x + 5, y + 3), new(x + 17, y + 10), new(x + 5, y + 17) }); break;
             case AppIcon.Stop:
                 using (var b = new SolidBrush(c)) g.FillRectangle(b, x + 4, y + 4, 12, 12); break;
             case AppIcon.Search:
